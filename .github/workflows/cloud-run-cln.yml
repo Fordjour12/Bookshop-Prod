@@ -1,0 +1,53 @@
+name: Build and Deploy to Cloud Run
+
+on:
+    pull_request:
+        branches:
+            - main
+
+env:
+    PROJECT_ID: bookshop-prod-353018 # TODO: update Google Cloud project id
+    SERVICE: bookshop-prod # TODO: update Cloud Run service name
+    REGION: us-central1 # TODO: update Cloud Run service region
+    IMAGE_NAME: gcr.io/bookshop-prod-353018/bookshop-prod
+
+jobs:
+    deploy:
+        # Add 'id-token' with the intended permissions for workload identity federation
+        permissions:
+            contents: 'read'
+            id-token: 'write'
+
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+
+            - name: Google Auth
+              id: auth
+              uses: 'google-github-actions/auth@v0'
+              with:
+                  credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+            - name: Docker Auth
+              id: docker-auth
+              run: gcloud auth configure-docker --quiet
+            - name: Build and Push Container
+              run: |-
+                  cd client-app/
+                  docker build -t $IMAGE_NAME .
+                  docker push $IMAGE_NAME
+
+            - name: Deploy to Cloud Run
+              id: deploy
+              # uses: 'google-github-actions/deploy-cloudrun@v0'
+              run: |-
+                  gcloud run deploy "$SERVICE" \
+                   --region "$REGION" \
+                   --image "$IMAGE_NAME" \
+                   --platform "managed" \
+                   --allow-unauthenticated \
+
+            # If required, use the Cloud Run url output in later steps
+            - name: Show Output
+              run: echo ${{ steps.deploy.outputs.url }}

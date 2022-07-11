@@ -1,0 +1,39 @@
+{
+	"name": "backend",
+	"version": "1.0.0",
+	"description": "A Bookshop Backend written in JavaScript with Objectionjs,Knex,postgresql and react",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node app.js",
+		"dev": "nodemon app.js",
+		"migrate": "npx knex migrate:latest --knexfile ./knexfile.js",
+		"rollback": "npx knex migrate:rollback --knexfile ./knexfile.js",
+		"seed": "npx knex seed:run --knexfile ./knexfile.js",
+		"migrate:Prod": "npx knex migrate:latest --env production --knexfile ./knexfile.js",
+		"rollback:Prod": "npx knex migrate:rollback --env production --knexfile ./knexfile.js",
+		"seed:Prod": "npx knex seed:run --env production --knexfile ./knexfile.js"
+	},
+	"type": "module",
+	"keywords": [
+		"Bookshop",
+		"Bookstore"
+	],
+	"author": "McCamble Kofi Fordjour Bobie",
+	"license": "MIT",
+	"dependencies": {
+		"bcrypt": "^5.0.1",
+		"compression": "^1.7.4",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.1",
+		"express": "^4.18.1",
+		"helmet": "^5.1.0",
+		"http-errors": "^2.0.0",
+		"jsonwebtoken": "^8.5.1",
+		"knex": "^2.1.0",
+		"objection": "^3.0.1",
+		"pg": "^8.7.3",
+		"redis": "^4.2.0",
+		"volleyball": "^1.5.1"
+	}
+}

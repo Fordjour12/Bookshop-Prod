@@ -1,0 +1,26 @@
+{
+  "name": "bookshop-prod",
+  "version": "1.0.0",
+  "description": "An Online Bookshop ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Fordjour12/Bookshop-Prod.git"
+  },
+  "keywords": [
+    "Bookshop"
+  ],
+  "author": "Bobie Fordjour McCamble Kofi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Fordjour12/Bookshop-Prod/issues"
+  },
+  "homepage": "https://github.com/Fordjour12/Bookshop-Prod#readme",
+  "devDependencies": {
+    "eslint": "^8.19.0",
+    "eslint-plugin-react": "^7.30.1"
+  }
+}
