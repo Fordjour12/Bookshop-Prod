@@ -49,9 +49,6 @@ jobs:
                    --image "$IMAGE_NAME" \
                    --platform "managed" \
                    --allow-unauthenticated \
-                   --set-env-vars ${{secrets.ELEPHANTSQL_CONNECTION}} \
-                   --set-env-vars ${{secrets.REDIS_CONNECTION}} \
-                   --set-env-vars ${{secrets.ACCESS_TOKEN_SECRET}} \
 
             # If required, use the Cloud Run url output in later steps
             - name: Show Output
