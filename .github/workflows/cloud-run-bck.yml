@@ -4,6 +4,9 @@ on:
     pull_request:
         branches:
             - main
+    push:
+        branches:
+            - main
 env:
     PROJECT_ID: bookshop-prod-353018 # TODO: update Google Cloud project id
     SERVICE: bookshop-prod-bck # TODO: update Cloud Run service name
