@@ -9,10 +9,7 @@
 		"dev": "nodemon app.js",
 		"migrate": "npx knex migrate:latest --knexfile ./knexfile.js",
 		"rollback": "npx knex migrate:rollback --knexfile ./knexfile.js",
-		"seed": "npx knex seed:run --knexfile ./knexfile.js",
-		"migrate:Prod": "npx knex migrate:latest --env production --knexfile ./knexfile.js",
-		"rollback:Prod": "npx knex migrate:rollback --env production --knexfile ./knexfile.js",
-		"seed:Prod": "npx knex seed:run --env production --knexfile ./knexfile.js"
+		"seed": "npx knex seed:run --knexfile ./knexfile.js"
 	},
 	"type": "module",
 	"keywords": [
