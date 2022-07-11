@@ -6,6 +6,9 @@ import volleyball from 'volleyball'
 import createError from 'http-errors'
 import 'dotenv/config'
 
+// Directories imports
+import CustomerRouter from './routes/customer.routes.js'
+
 const app = express()
 
 // middleware
@@ -24,6 +27,9 @@ app.get('/', async (_request, response) => {
 	</div>
 	`)
 })
+
+// Routes
+app.use(CustomerRouter)
 
 app.use(async (_request, _response, next) => {
 	next(createError.NotFound())
