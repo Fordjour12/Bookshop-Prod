@@ -1,0 +1,146 @@
+@use '../../utils/' as *;
+
+.Form {
+	display: grid;
+	grid-template-columns: 2fr rem(700);
+	align-items: center;
+
+	&--Area {
+		margin: 0;
+		padding: 0;
+
+		img {
+			max-width: 100%;
+			display: block;
+		}
+		&__card {
+			margin: rem(10) auto;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			max-width: rem(426);
+			background-color: #fff;
+			border-radius: 10px;
+			box-shadow: 0 10px 20px 0 rgba(#999, 0.25);
+			padding: em(12);
+
+			&-img {
+				border-radius: rem(8);
+				overflow: hidden;
+				padding-bottom: 50%;
+				background-image: url('/src/assets/phantom Icon/phantom\ 6.jpg');
+				background-repeat: no-repeat;
+				background-size: 150%;
+				background-position: 0 35%;
+				position: relative;
+			}
+			&-img-h2 {
+				position: absolute;
+				top: 15%;
+				left: 10%;
+				right: 10%;
+				font-size: rem(29);
+				line-height: 1.222;
+				color: #276a4e;
+
+				small {
+					display: block;
+					font-size: em(12);
+					font-weight: 400;
+					margin-top: em(4);
+				}
+			}
+
+			&-form {
+				padding: rem(16) rem(16) 0;
+
+				&-input {
+					display: flex;
+					flex-direction: column-reverse;
+					position: relative;
+					padding-top: rem(24);
+
+					&-field {
+						border: 0;
+						z-index: 1;
+						background-color: transparent;
+						border-bottom: 2px solid #eee;
+						font: inherit;
+						font-size: 1.125rem;
+						padding: 0.25rem 0;
+
+						&:focus,
+						&:valid {
+							outline: 0;
+							border-bottom-color: #6658d3;
+
+							& + .Form--Area__card-form-input-label {
+								color: #6658d3;
+								transform: translateY(-.9rem);
+							}
+						}
+					}
+
+					&-label {
+						color: #8597a3;
+						position: absolute;
+						top: 0.9rem;
+						transition: all 0.25s ease;
+					}
+				}
+				&-input + &-input {
+					margin-top: 1.5rem;
+				}
+			}
+
+			&-form-cta {
+				margin-top: rem(16);
+				&-btn {
+					font: inherit;
+					font-size: 1.25rem;
+					padding: 1em;
+					width: 100%;
+					background-color: #6658d3;
+					border-radius: 6px;
+					color: #fff;
+					border: 0;
+
+					&:focus {
+						outline: 0;
+					}
+				}
+			}
+
+			&-form-info {
+				padding: 0.5rem 1rem;
+				text-align: center;
+				font-size: 0.875rem;
+				color: #8597a3;
+				a {
+					display: block;
+					color: #6658d3;
+					text-decoration: none;
+				}
+			}
+		}
+
+		&__link {
+			padding: 0.5rem 1rem;
+			font-size: 0.875rem;
+			color: #8597a3;
+			a {
+				color: #6658d3;
+				text-decoration: none;
+			}
+		}
+	}
+
+	&--Image {
+		background: url('/src/assets/phantom Icon/phantom 5.jpg');
+		max-width: 100vw;
+		height: 100vh;
+		background-repeat: no-repeat;
+		background-size: cover;
+		border-radius: rem(40) 0 0 rem(40);
+	}
+}
