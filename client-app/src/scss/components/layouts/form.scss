@@ -76,7 +76,7 @@
 
 							& + .Form--Area__card-form-input-label {
 								color: #6658d3;
-								transform: translateY(-.9rem);
+								transform: translateY(-0.9rem);
 							}
 						}
 					}
@@ -142,5 +142,23 @@
 		background-repeat: no-repeat;
 		background-size: cover;
 		border-radius: rem(40) 0 0 rem(40);
+	}
+}
+
+.error-text {
+	margin: 0;
+	padding: 0;
+	color: #b40e0e;
+}
+
+.Form--Area__card-form-input-field-invalid {
+	&:focus,
+	&:valid {
+		outline: 0;
+		border-bottom-color: #b40e0e;
+
+		& + .Form--Area__card-form-input-label {
+			color: #b40e0e;
+		}
 	}
 }

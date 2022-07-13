@@ -1,23 +1,29 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const register = () => {
-	const userRef = useRef()
-	const emailRef = useRef()
-	const passwordRef = useRef()
-
 	// useStates
 	const [user, setUser] = useState('')
-	const [userIsValid, setUserIsValid] = useState(false)
 	const [userNameTouched, setUserNameTouched] = useState(false)
 
 	const [password, setPassword] = useState('')
-	const [passwordIsValid, setPasswordsValid] = useState(false)
 	const [passwordTouched, setPasswordTouched] = useState(false)
 
 	const [email, setEmail] = useState('')
-	const [emailIsValid, setEmailIsValid] = useState(false)
 	const [emailTouched, setEmailTouched] = useState(false)
+
+	const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/
+	const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
+	const EML_REGEX =
+		/^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/
+
+	const userIsValid = user.trim() !== '' || USER_REGEX.test(user)
+	const emailIsValid = email.trim() !== '' || PWD_REGEX.test(email)
+	const passwordIsValid = password.trim() !== '' || EML_REGEX.test(password)
+
+	const userInputIsInvalid = !userIsValid && userNameTouched
+	const passwordInputIsInvalid = !passwordIsValid && passwordTouched
+	const emailInputIsInvalid = !emailIsValid && emailTouched
 
 	// onChangeHandlers
 	const userChangeHandler = (event) => {
@@ -30,53 +36,41 @@ const register = () => {
 		setEmail(event.target.value)
 	}
 
-	// useEffectHandlers
-	// useEffect(() => {
-	// 	userRef.current.focus()
-	// 	emailRef.current.focus()
-	// 	passwordRef.current.focus()
-	// })
-
-	//valid &&touched states
-
-	const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/
-	const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
-	const EML_REGEX =
-		/^[a-zA-Z0-9.! #$%&'*+/=? ^_`{|}~-]+@[a-zA-Z0-9-]+(?:\. [a-zA-Z0-9-]+)*$/
+	const userBlurHandler = () => {
+		setUserNameTouched(true)
+	}
+	const passwordBlurHandler = () => {
+		setPasswordTouched(true)
+	}
+	const emailBlurHandler = () => {
+		setEmailTouched(true)
+	}
 
 	// onSubmitHandler
 	const submitHandler = (event) => {
 		event.preventDefault()
-		const userRegexTest = USER_REGEX.test(user)
-		const emailRegexTest = EML_REGEX.test(email)
-		const passwordRegexTest = PWD_REGEX.test(password)
 
 		setUserNameTouched(true)
 		setEmailTouched(true)
 		setPasswordTouched(true)
 
-		if (
-			user.trim() === '' ||
-			password.trim() === '' ||
-			email.trim() === '' ||
-			userRegexTest ||
-			emailRegexTest ||
-			passwordRegexTest
-		) {
-			setUserIsValid(false)
-			setEmailIsValid(false)
-			setPasswordsValid(false)
+		if (!userIsValid || !emailIsValid || passwordIsValid) {
 			return
 		}
 
-		setUserIsValid(true)
-		setEmailIsValid(true)
-		setPasswordsValid(true)
+		setUser('')
+		setEmail('')
+		setPassword('')
+
+		setUserNameTouched(false)
+		setEmailTouched(false)
+		setPasswordTouched(false)
 	}
 
-	const userInputIsInvalid = !userIsValid && userNameTouched
-	const passwordInputIsInvalid = !passwordIsValid && passwordTouched
-	const emailInputIsInvalid = !emailIsValid && emailTouched
+	const InputClasses =
+		userInputIsInvalid || emailInputIsInvalid || passwordInputIsInvalid
+			? 'Form--Area__card-form-input-field-invalid'
+			: 'Form--Area__card-form-input-field'
 
 	return (
 		<div className='Form Register'>
@@ -97,11 +91,11 @@ const register = () => {
 								type='text'
 								name='username'
 								id='username'
-								ref={userRef}
 								placeholder='Bobiemmkb'
 								className='Form--Area__card-form-input-field'
 								onChange={userChangeHandler}
 								value={user}
+								onBlur={userBlurHandler}
 								required
 							/>
 							<label
@@ -112,48 +106,34 @@ const register = () => {
 							</label>
 
 							{userInputIsInvalid && (
-								<p className='error-text'>
-									Name must not be empty ,6 to 30 characters.
-									<br />
-									Must begin with a letter, numbers,special
-									character
-								</p>
+								<small className='error-text'>
+									Name must be 4 to 30 characters.
+								</small>
 							)}
 						</div>
 						<div className='Form--Area__card-form-input'>
-							{/* <input
-								type='email'
+							<input
+								type='text'
 								name='email'
 								id='email'
-								ref={emailRef}
 								placeholder='Bobiemmkb@email.com'
 								className='Form--Area__card-form-input-field'
 								onChange={emailChangeHandler}
 								value={email}
+								onBlur={emailBlurHandler}
+								required
 							/>
 							<label
 								htmlFor='Email'
 								className='Form--Area__card-form-input-label'
 							>
 								Email
-							</label> */}
-							<input
-								type='text'
-								className='Form--Area__card-form-input-field'
-								// value='vlockn@gmail.com'
-								required
-							/>
-							<label className='Form--Area__card-form-input-label'>
-								Email
 							</label>
 
 							{emailInputIsInvalid && (
-								<p className='error-text'>
-									Name must not be empty ,6 to 30 characters.
-									<br />
-									Must begin with a letter, numbers,special
-									character
-								</p>
+								<small className='error-text'>
+									Email must be 6 to 30 characters.
+								</small>
 							)}
 						</div>
 						<div className='Form--Area__card-form-input'>
@@ -162,9 +142,9 @@ const register = () => {
 								type='password'
 								name='password'
 								id='password'
-								ref={passwordRef}
 								onChange={passwordChangeHandler}
 								value={password}
+								onBlur={passwordBlurHandler}
 								required
 							/>
 							<label
@@ -175,12 +155,10 @@ const register = () => {
 							</label>
 
 							{passwordInputIsInvalid && (
-								<p className='error-text'>
-									Name must not be empty ,6 to 30 characters.
-									<br />
-									Must begin with a letter, numbers,special
-									character
-								</p>
+								<small className='error-text'>
+									Password must be 8 to 30 with special
+									characters.
+								</small>
 							)}
 						</div>
 
