@@ -1,15 +1,9 @@
 @use '../../utils/' as *;
 
-$bg-clr: rgba(
-	$color: chocolate,
-	$alpha: 1,
-);
-
 .sidebar {
 	display: fixed;
 	height: 100vh;
 	padding-left: rem(25);
-	background-color: $bg-clr;
 }
 
 .header {
