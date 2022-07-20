@@ -9,14 +9,12 @@ export default {
 	development: {
 		debug: true,
 		client: 'pg',
-		connection: process.env.ELEPHANTSQL_CONNECTION,
-		// connection: {
-		// 	// host: process.env.Postgres_HOST,
-		// 	// port: process.env.Postgres_PORT,
-		// 	database: process.env.Postgres_DB,
-		// 	user: process.env.Postgres_USER,
-		// 	password: process.env.Postgres_PASSWORD,
-		// },
+		// connection: process.env.ELEPHANTSQL_CONNECTION,
+		connection: {
+			database: process.env.Postgres_DB,
+			user: process.env.Postgres_USER,
+			password: process.env.Postgres_PASSWORD,
+		},
 		pool: {
 			min: 2,
 			max: 10,

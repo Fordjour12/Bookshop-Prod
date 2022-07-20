@@ -1,8 +1,7 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import jwt from 'jsonwebtoken'
 import createError from 'http-errors'
 import client from './redis.config.js'
-
-client.set('kofi', 'cars')
 
 const signAccessToken = (customer_Id) => {
 	return new Promise((resolve, reject) => {
@@ -45,33 +44,69 @@ const verifyAccessToken = (Request, _Response, Next) => {
 		Next()
 	})
 }
-const signRefreshToken = (customer_Id) => {
-	return new Promise((resolve, reject) => {
+
+const signRefreshToken = async (customer_Id) => {
+	try {
 		const payload = {}
 		const secret = process.env.REFRESH_TOKEN_SECRET
 		const options = {
 			expiresIn: '1y',
-			issuer: 'thephantombooks.com',
+			issuer: 'thephatombooks.com',
 			audience: customer_Id,
 		}
-		jwt.sign(payload, secret, options, (err, token) => {
-			if (err) {
-				console.log(err.message)
-				// reject(err)
-				reject(createError.InternalServerError())
-			}
+		const check = await client.EXISTS(customer_Id) // check if token exists in cache already
+		const getToken = client.GET(customer_Id)
 
-			client.SET(customer_Id, token, 'EX', 365 * 24 * 60 * 60, (err) => {
-				if (err) {
-					console.log(err.message)
-					reject(createError.InternalServerError())
-					return
+		check
+			? getToken
+			: jwt.sign(payload, secret, options, (error, token) => {
+				if (error) {
+					console.log(error.message)
+					createError.InternalServerError()
 				}
-				resolve(token)
-			})
-		})
-	})
+				client.SET(customer_Id, token, { EX: 60 })
+			  })
+		return getToken
+	} catch (err) {
+		console.error('Token not added to cache')
+	}
 }
+
+// const signRefreshToken = (customer_Id) => {
+// 	return new Promise((resolve, reject) => {
+// 		const payload = {}
+// 		const secret = process.env.REFRESH_TOKEN_SECRET
+// 		const options = {
+// 			expiresIn: '1y',
+// 			issuer: 'thephatombooks.com',
+// 			audience: customer_Id,
+// 		}
+
+// 		const check = client.EXISTS(customer_Id)
+
+// 		if (check === 1) {
+
+// 			client.GET(customer_Id)
+// 		} else {
+// 			jwt.sign(
+// 				payload,
+// 				secret,
+// 				options,
+// 				(err, token) => {
+// 					if (err) {
+// 						console.log(err.message)
+// 						reject(createError.InternalServerError())
+// 					}
+// 					client.SET(customer_Id, token, { EX: 60 })
+// 					// token
+// 				}
+
+// 				// EX: 365 * 24 * 60 * 60
+// 			)
+// 			resolve(client.GET(customer_Id))
+// 		}
+// 	})
+// }
 
 const verifyRefreshToken = (refreshToken) => {
 	return new Promise((resolve, reject) => {

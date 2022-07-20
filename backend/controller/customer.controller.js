@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt'
 import {
 	signAccessToken,
 	signRefreshToken,
-	verifyAccessToken,
 	verifyRefreshToken,
 } from '../config/json_token.config.js'
 
@@ -26,14 +25,15 @@ const getRegister = async (Request, Response, Next) => {
 		)
 		// console.log(Data)
 		const accessToken = await signAccessToken(Data.customer_Id)
+		const refreshToken = await signRefreshToken(Data.customer_Id)
 		Response.status(201).send({
 			message: 'New Customer Created',
 			data: Data,
 			token: accessToken,
+			rfshToken: refreshToken,
 		})
 
-		const refreshToken = await signRefreshToken(Data.customer_Id)
-		console.log(refreshToken)
+		// console.log(refreshToken)
 	} catch (error) {
 		if (!error.statusCode || error) {
 			error.statusCode = createError[400]
@@ -45,7 +45,7 @@ const getRegister = async (Request, Response, Next) => {
 
 const getLoggedIn = async (Request, Response, Next) => {
 	try {
-		const userInfo = Customer.fromJson(Request.body)
+		let userInfo = Request.body
 
 		const userData = await Customer.query().first().where({
 			email: userInfo.email,
@@ -63,10 +63,15 @@ const getLoggedIn = async (Request, Response, Next) => {
 		if (!validPassword) {
 			throw createError.Unauthorized('Password not valid')
 		}
+	
+		const accessToken = await signAccessToken(userData.customer_Id)
+		const refreshToken = await signRefreshToken(userData.customer_Id)
 
 		Response.status(200).send({
 			message: 'Successful',
 			data: userData,
+			token: accessToken,
+			rfshToken: refreshToken,
 		})
 	} catch (error) {
 		if (!error.statusCode || error) {
@@ -94,7 +99,7 @@ const logout = async (Request, Response, Next) => {
 	try {
 		const { refreshToken } = Request.body
 		if (!refreshToken) throw createError.BadRequest()
-		const customer_Id = await verifyAccessToken(refreshToken)
+		const customer_Id = await verifyRefreshToken(refreshToken)
 		client.DEL(customer_Id, (error, val) => {
 			if (error) {
 				console.log(error.message)
